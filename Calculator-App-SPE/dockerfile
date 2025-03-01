@@ -1,11 +1,17 @@
-# Use OpenJDK 11 base image
-FROM openjdk:17
+# Use an official OpenJDK runtime as a parent image
+FROM openjdk:17-jdk-slim
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the JAR file into the container and rename it to app.jar
+# Copy the JAR file from the build context (Calculator-App-SPE/target/) to the container
 COPY Calculator-App-SPE/target/ /app/
 
-# Set the command to run the JAR file when the container starts
-CMD ["java", "-jar", "app.jar"]
+# Rename the JAR file to app.jar (you can adjust this name as needed)
+RUN mv /app/Calculator-SPE-MiniProject-1.0-SNAPSHOT-jar-with-dependencies.jar /app/app.jar
+
+# Expose the port the app runs on (if needed)
+EXPOSE 8080
+
+# Define the command to run the JAR file
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]
