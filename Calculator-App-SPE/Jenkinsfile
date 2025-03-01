@@ -1,80 +1,48 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE_NAME = 'calculator-spe-hyma'
-        DOCKER_IMAGE_TAG = 'hyma'
-        ANSIBLE_PLAYBOOK = 'Calculator-App-SPE/deploy.yml'  // Ensure it's relative
+        DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
     }
-
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/HymaJayaram-067/Calculator.spe.git'
+                git branch: 'main', 
+                url: 'https://github.com/HymaJayaram-067/Calculator.spe.git'
             }
         }
-
-        stage('Build with Maven') {
+        
+        stage('Build') {
             steps {
-                script {
-                    // Build the Maven project
-                    sh 'cd Calculator-App-SPE && mvn clean install'
-                    
-                    // Rename the JAR file to match the one expected in Dockerfile
-                    sh 'mv Calculator-App-SPE/target/Calculator-App-SPE-1.0-SNAPSHOT.jar Calculator-App-SPE/target/Calculator-SPE-MiniProject-1.0-SNAPSHOT-jar-with-dependencies.jar'
-                    
-                    // List the contents of the target directory to verify if JAR is renamed correctly
-                    sh 'ls -la Calculator-App-SPE/target'
+                sh 'mvn clean package'
+            }
+        }
+        
+        stage('Docker Build') {
+            steps {
+                sh 'docker build -t hymajayaram-067/calculator-spe:latest .'
+            }
+        }
+        
+        stage('Docker Push') {
+            steps {
+                withCredentials([usernamePassword(
+                    credentialsId: 'dockerhub-creds',
+                    usernameVariable: 'DOCKER_USER',
+                    passwordVariable: 'DOCKER_PASS'
+                )]) {
+                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                    sh 'docker push hymajayaram-067/calculator-spe:latest'
                 }
             }
         }
-
-        stage('Build Docker Image') {
+        
+        stage('Deploy') {
             steps {
-                script {
-                    // Check the current directory before the build step
-                    sh 'pwd'
-                    sh 'ls -la'  // List all files in the current directory
-                    sh 'ls -la Calculator-App-SPE'  // List files in the Calculator-App-SPE directory
-
-                    // Ensure the Docker build is using the correct context and that the JAR exists
-                    sh '''
-                        docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG -f Calculator-App-SPE/Dockerfile .
-                    '''
-                }
+                ansiblePlaybook(
+                    playbook: 'ansible/deploy.yml',
+                    inventory: 'ansible/hosts.ini'
+                )
             }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    // Login to Docker Hub and push the Docker image
-                    sh '''
-                        docker login -u hyma067 -p MT2024067@hyma
-                        docker tag $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG hyma067/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
-                        docker push hyma067/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
-                    '''
-                }
-            }
-        }
-
-        stage('Deploy with Ansible') {
-            steps {
-                script {
-                    // Run Ansible playbook to deploy the Docker container locally
-                    sh '''
-                        ansible-playbook $WORKSPACE/$ANSIBLE_PLAYBOOK
-                    '''
-                }
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Build, Docker image push, and deployment were successful!'
-        }
-        failure {
-            echo 'Build, Docker image push, or deployment failed.'
         }
     }
 }
