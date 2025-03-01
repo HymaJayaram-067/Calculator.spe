@@ -1,3 +1,11 @@
-FROM openjdk:11
-COPY target/Calculator-SPE-MiniProject-1.0-SNAPSHOT-jar-with-dependencies.jar app.jar # Match the new JAR name
+# Use OpenJDK 11 base image
+FROM openjdk:17
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the JAR file into the container and rename it to app.jar
+COPY Calculator-App-SPE/target/Calculator-SPE-MiniProject-1.0-SNAPSHOT-jar-with-dependencies.jar app.jar
+
+# Set the command to run the JAR file when the container starts
 CMD ["java", "-jar", "app.jar"]
