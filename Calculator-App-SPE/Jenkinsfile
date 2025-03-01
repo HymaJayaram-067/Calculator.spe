@@ -3,7 +3,7 @@ pipeline {
     environment {
         DOCKER_IMAGE_NAME = 'calculator-spe-hyma'
         DOCKER_IMAGE_TAG = 'hyma'  // Correct image tag
-        ANSIBLE_PLAYBOOK = '/path/to/your/playbook/deploy.yml'  // Specify the path to your Ansible playbook
+        ANSIBLE_PLAYBOOK = '/Calculator-App-SPE/deploy.yml'  // Specify the path to your Ansible playbook
     }
 
     stages {
