@@ -1,0 +1,17 @@
+---
+- name: Deploy Docker container for Calculator App
+  hosts: localhost
+  tasks:
+    - name: Pull Docker image
+      docker_image:
+        name: hyma067/calculator-spe-hyma
+        tag: hyma
+        source: pull
+ 
+    - name: Start Docker container
+      docker_container:
+        name: calculator-spe-hyma-container
+        image: hyma067/calculator-spe-hyma:hyma
+        state: started
+        ports:
+          - "8080:8080"
