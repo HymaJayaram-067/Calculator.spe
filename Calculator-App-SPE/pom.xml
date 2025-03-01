@@ -40,7 +40,7 @@
                 <configuration>
                     <archive>
                         <manifestEntries>
-                            <Main-Class>org.example.Main</Main-Class> <!-- Replace with your actual main class -->
+                            <Main-Class>org.example.MainApp</Main-Class> <!-- Replace with your actual main class -->
                         </manifestEntries>
                     </archive>
                 </configuration>
