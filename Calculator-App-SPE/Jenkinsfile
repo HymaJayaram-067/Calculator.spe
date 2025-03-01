@@ -49,7 +49,7 @@ pipeline {
                 script {
                     // Login to Docker Hub and push the Docker image
                     sh '''
-                        docker login -u hyma067 -p MT2024067
+                        docker login -u hyma067 -p MT2024067@hyma
                         docker tag $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG hyma067/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
                         docker push hyma067/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
                     '''
