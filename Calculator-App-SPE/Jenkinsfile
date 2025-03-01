@@ -2,22 +2,20 @@ pipeline {
     agent any
     environment {
         DOCKER_IMAGE_NAME = 'calculator-spe-hyma'
-        DOCKER_IMAGE_TAG = 'hyma'  // Correct image tag
-        ANSIBLE_PLAYBOOK = '/Calculator-App-SPE/deploy.yml'  // Specify the path to your Ansible playbook
+        DOCKER_IMAGE_TAG = 'hyma'
+        ANSIBLE_PLAYBOOK = '/Calculator-App-SPE/deploy.yml'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                // Clone the repository
-                git 'https://github.com/HymaJayaram-067/Calculator.spe.git'  
+                git branch: 'main', url: 'https://github.com/HymaJayaram-067/Calculator.spe.git' // Explicit branch name
             }
         }
 
         stage('Build with Maven') {
             steps {
                 script {
-                    // Build the Maven project
                     sh 'cd Calculator-App-SPE && mvn clean install'
                 }
             }
@@ -26,7 +24,6 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image
                     sh '''
                         cd Calculator-App-SPE
                         docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG .
@@ -38,7 +35,6 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Tag and push the Docker image to your Docker Hub repository
                     sh '''
                         docker tag $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG hyma067/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
                         docker push hyma067/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
@@ -50,7 +46,6 @@ pipeline {
         stage('Deploy with Ansible') {
             steps {
                 script {
-                    // Run Ansible playbook to deploy the Docker container locally
                     sh '''
                         ansible-playbook $ANSIBLE_PLAYBOOK
                     '''
