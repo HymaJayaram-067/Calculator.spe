@@ -20,7 +20,7 @@ pipeline {
                     sh 'cd Calculator-App-SPE && mvn clean install'
                     
                     // Rename the JAR file to match the one expected in Dockerfile
-                    sh 'mv Calculator-App-SPE/target/Calculator-App-SPE-1.0-SNAPSHOT.jar Calculator-App-SPE/target/Calculator-SPE-MiniProject-1.0-SNAPSHOT-jar-with-dependencies.jar'
+                    sh 'cp Calculator-App-SPE/target/Calculator-App-SPE-1.0-SNAPSHOT.jar Calculator-App-SPE/target/Calculator-SPE-MiniProject-1.0-SNAPSHOT-jar-with-dependencies.jar'
                     
                     // List the contents of the target directory to verify if JAR is renamed correctly
                     sh 'ls -la Calculator-App-SPE/target'
@@ -31,6 +31,10 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Debugging: Check the directory structure
+                    sh 'ls -la Calculator-App-SPE'
+                    sh 'ls -la Calculator-App-SPE/target'
+                    
                     // Ensure the Docker build is using the correct context and that the JAR exists
                     sh '''
                         docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG Calculator-App-SPE
