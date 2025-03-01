@@ -4,8 +4,8 @@ pipeline {
         DOCKER_IMAGE_NAME = 'calculator-spe-hyma'
         DOCKER_IMAGE_TAG = 'hyma'
         ANSIBLE_PLAYBOOK = 'Calculator-App-SPE/deploy.yml'  // Ensure it's relative
-        DOCKER_USERNAME = credentials('dockerhub-username')  // Add Jenkins credentials for Docker Hub username
-        DOCKER_PASSWORD = credentials('dockerhub-password')  // Add Jenkins credentials for Docker Hub password
+        DOCKER_USERNAME = credentials('hyma067')  // Add Jenkins credentials for Docker Hub username
+        DOCKER_PASSWORD = credentials('MT2024067')  // Add Jenkins credentials for Docker Hub password
     }
 
     stages {
