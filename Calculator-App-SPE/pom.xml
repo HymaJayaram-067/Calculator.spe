@@ -8,9 +8,7 @@
     <artifactId>Calculator-App-SPE</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <!-- Self Added Code Begins --> 
-
-    <!-- Dependency for JUnit -->
+    <!-- Self Added Code Begins -->
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -19,9 +17,8 @@
             <scope>test</scope>
         </dependency>
 
-    <!-- Dependency for Logging -->
-  	<dependency>
-    	    <groupId>org.apache.logging.log4j</groupId>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>2.13.0</version>
         </dependency>
@@ -30,11 +27,26 @@
             <artifactId>log4j-core</artifactId>
             <version>2.13.0</version>
         </dependency>
-
     </dependencies>
 
+    <!-- Maven Jar Plugin Configuration to specify Main Class -->
     <build>
         <plugins>
+            <!-- Maven Jar Plugin to define the main class in manifest -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <archive>
+                        <manifestEntries>
+                            <Main-Class>org.example.Main</Main-Class> <!-- Replace with your actual main class -->
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- Maven Assembly Plugin (Optional, if you want all dependencies in a single jar) -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -48,7 +60,7 @@
                         <configuration>
                             <archive>
                                 <manifest>
-                                    <mainClass>org.example.Main</mainClass>
+                                    <mainClass>org.example.Main</mainClass> <!-- Replace with your actual main class -->
                                 </manifest>
                             </archive>
                             <descriptorRefs>
@@ -60,7 +72,6 @@
             </plugin>
         </plugins>
     </build>
-
     <!-- Self Added Code Ends -->
 
     <properties>
