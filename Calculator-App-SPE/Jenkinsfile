@@ -4,8 +4,6 @@ pipeline {
         DOCKER_IMAGE_NAME = 'calculator-spe-hyma'
         DOCKER_IMAGE_TAG = 'hyma'
         ANSIBLE_PLAYBOOK = 'Calculator-App-SPE/deploy.yml'  // Ensure it's relative
-        DOCKER_USERNAME = credentials('hyma067')  // Add Jenkins credentials for Docker Hub username
-        DOCKER_PASSWORD = credentials('MT2024067')  // Add Jenkins credentials for Docker Hub password
     }
 
     stages {
@@ -46,7 +44,7 @@ pipeline {
                 script {
                     // Login to Docker Hub and push the Docker image
                     sh '''
-                        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+                        docker login -u hyma067 -p MT2024067
                         docker tag $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG hyma067/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
                         docker push hyma067/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
                     '''
