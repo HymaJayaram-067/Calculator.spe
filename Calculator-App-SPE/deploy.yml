@@ -2,7 +2,7 @@
 - name: Deploy Docker container for Calculator App
   hosts: localhost
   vars:
-    ansible_python_interpreter: /usr/lib/python3  # Add this line to specify Python 3
+    ansible_python_interpreter: /usr/bin/python3  # Add this line to specify Python 3
   tasks:
     - name: Pull Docker image
       docker_image:
