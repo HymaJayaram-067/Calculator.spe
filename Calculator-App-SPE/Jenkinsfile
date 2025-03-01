@@ -18,7 +18,11 @@ pipeline {
                 script {
                     // Build the Maven project
                     sh 'cd Calculator-App-SPE && mvn clean install'
-                    // List the contents of the target directory to verify if JAR is created
+                    
+                    // Rename the JAR file to match the one expected in Dockerfile
+                    sh 'mv Calculator-App-SPE/target/Calculator-App-SPE-1.0-SNAPSHOT.jar Calculator-App-SPE/target/Calculator-SPE-MiniProject-1.0-SNAPSHOT-jar-with-dependencies.jar'
+                    
+                    // List the contents of the target directory to verify if JAR is renamed correctly
                     sh 'ls -la Calculator-App-SPE/target'
                 }
             }
