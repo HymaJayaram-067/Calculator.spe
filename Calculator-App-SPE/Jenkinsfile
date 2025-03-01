@@ -16,7 +16,10 @@ pipeline {
         stage('Build with Maven') {
             steps {
                 script {
+                    // Build the Maven project
                     sh 'cd Calculator-App-SPE && mvn clean install'
+                    // List the contents of the target directory to verify if JAR is created
+                    sh 'ls -la Calculator-App-SPE/target'
                 }
             }
         }
@@ -24,6 +27,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
+                    // Ensure the Docker build is using the correct context and that the JAR exists
                     sh '''
                         cd Calculator-App-SPE
                         docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG .
@@ -35,6 +39,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
+                    // Tag and push the Docker image to Docker Hub
                     sh '''
                         docker tag $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG hyma067/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
                         docker push hyma067/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
@@ -46,6 +51,7 @@ pipeline {
         stage('Deploy with Ansible') {
             steps {
                 script {
+                    // Run Ansible playbook to deploy the Docker container locally
                     sh '''
                         ansible-playbook $ANSIBLE_PLAYBOOK
                     '''
