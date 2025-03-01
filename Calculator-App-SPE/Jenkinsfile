@@ -1,9 +1,11 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE_NAME = 'calculator-spe-hyma'       
+        DOCKER_IMAGE_NAME = 'calculator-spe-hyma'
+        DOCKER_IMAGE_TAG = 'hyma'  // Correct image tag
+        ANSIBLE_PLAYBOOK = '/path/to/your/playbook/deploy.yml'  // Specify the path to your Ansible playbook
     }
- 
+
     stages {
         stage('Checkout') {
             steps {
@@ -11,47 +13,58 @@ pipeline {
                 git 'https://github.com/HymaJayaram-067/Calculator.spe.git'  
             }
         }
- 
+
         stage('Build with Maven') {
             steps {
                 script {
-                   
+                    // Build the Maven project
                     sh 'cd Calculator-App-SPE && mvn clean install'
                 }
             }
         }
- 
+
         stage('Build Docker Image') {
             steps {
                 script {
                     // Build the Docker image
                     sh '''
                         cd Calculator-App-SPE
-                        docker build -t $DOCKER_IMAGE_NAME .
+                        docker build -t $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG .
                     '''
                 }
             }
         }
- 
+
         stage('Push Docker Image') {
             steps {
                 script {
-                    
+                    // Tag and push the Docker image to your Docker Hub repository
                     sh '''
-                        docker tag $DOCKER_IMAGE_NAME hyma067/$DOCKER_IMAGE_NAME:latest1
-                        docker push hyma067/$DOCKER_IMAGE_NAME:latest1
+                        docker tag $DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG hyma067/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
+                        docker push hyma067/$DOCKER_IMAGE_NAME:$DOCKER_IMAGE_TAG
+                    '''
+                }
+            }
+        }
+
+        stage('Deploy with Ansible') {
+            steps {
+                script {
+                    // Run Ansible playbook to deploy the Docker container locally
+                    sh '''
+                        ansible-playbook $ANSIBLE_PLAYBOOK
                     '''
                 }
             }
         }
     }
- 
+
     post {
         success {
-            echo 'Build and Docker image push were successful!'
+            echo 'Build, Docker image push, and deployment were successful!'
         }
         failure {
-            echo 'Build or Docker image push failed.'
+            echo 'Build, Docker image push, or deployment failed.'
         }
     }
 }
