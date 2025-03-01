@@ -1,21 +1,21 @@
 pipeline {
     agent any
     environment {
-        DOCKER_IMAGE_NAME = 'calculator-spe-hyma'        // Replace with your desired image name
+        DOCKER_IMAGE_NAME = 'calculator-spe-hyma'       
     }
  
     stages {
         stage('Checkout') {
             steps {
                 // Clone the repository
-                git 'https://github.com/HymaJayaram-067/Calculator.spe.git'  // Replace with your Git repository URL
+                git 'https://github.com/HymaJayaram-067/Calculator.spe.git'  
             }
         }
  
         stage('Build with Maven') {
             steps {
                 script {
-                    // Navigate to the project folder and run Maven clean install
+                   
                     sh 'cd Calculator-App-SPE && mvn clean install'
                 }
             }
@@ -36,7 +36,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    // Tag the Docker image
+                    
                     sh '''
                         docker tag $DOCKER_IMAGE_NAME hyma067/$DOCKER_IMAGE_NAME:latest1
                         docker push hyma067/$DOCKER_IMAGE_NAME:latest1
