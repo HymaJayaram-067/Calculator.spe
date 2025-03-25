@@ -13,7 +13,7 @@ public class CalculatorTest
 	public void testSquareRoot()
 	{
 		// Test 1
-		assertEquals((Double) 4.0, calcObj.findSquareRoot(16.0));
+		assertEquals((Double) 5.0, calcObj.findSquareRoot(16.0));
 
 		// Test 2
 		assertEquals((Double) 0.0, calcObj.findSquareRoot(0.0));
