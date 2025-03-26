@@ -30,13 +30,13 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/HymaJayaram-067/Calculator.spe.git'
+                git branch: 'main', url: 'https://github.com/HymaJayaram-067/Cal_viva_demo.git'
             }
         }
 
         stage('Build') {
             steps {
-                dir('Calculator-App-SPE') {  
+                dir('Calculator') {  
                     sh 'mvn clean package'
                 }
             }
@@ -44,7 +44,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                dir('Calculator-App-SPE') {
+                dir('Calculator') {
                     sh 'mvn test'
                 }
             }
@@ -52,7 +52,7 @@ pipeline {
 
         stage('Containerize Application') {
             steps {
-                dir('Calculator-App-SPE'){
+                dir('Calculator'){
                 sh 'sudo docker build -t ${DOCKER_IMAGE} .'
             }
         }
@@ -74,7 +74,7 @@ pipeline {
 
         stage('Run Ansible Deployment') {
             steps {
-                dir('Calculator-App-SPE') {
+                dir('Calculator') {
                 script {
                     sh '''
                     echo "Running Ansible Playbook..."
