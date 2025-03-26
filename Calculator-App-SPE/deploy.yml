@@ -1,19 +1,27 @@
----
-- name: Deploy Docker container for Calculator App
-  hosts: localhost
-  vars:
-    ansible_python_interpreter: /usr/lib/python3  # Add this line to specify Python 3
+- name: Deploy Scientific Calculator
+  hosts: servers
+  become: yes  # Run commands as root
   tasks:
-    - name: Pull Docker image
-      docker_image:
-        name: hyma067/calculator-spe-hyma
-        tag: hyma
-        source: pull
 
-    - name: Start Docker container
-      docker_container:
-        name: calculator-spe-hyma-container
-        image: hyma067/calculator-spe-hyma:hyma
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    - name: Start Docker Service
+      service:
+        name: docker
         state: started
-        ports:
-          - "8080:8080"
+        enabled: yes
+
+    - name: Pull Docker Image from Docker Hub
+      command: docker pull hyma067/scientific-calculator1
+
+
+    - name: Remove any existing container
+      command: docker rm -f calculator_container
+      ignore_errors: yes  
+
+    - name: Run the Calculator Container
+      command: docker run -dit --name calculator_container hyma067/scientific-calculator1
