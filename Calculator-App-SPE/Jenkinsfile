@@ -36,7 +36,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                dir('Calculator') {  
+                dir('Calculator-App-SPE') {  
                     sh 'mvn clean package'
                 }
             }
@@ -44,7 +44,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                dir('Calculator') {
+                dir('Calculator-App-SPE') {
                     sh 'mvn test'
                 }
             }
@@ -52,7 +52,7 @@ pipeline {
 
         stage('Containerize Application') {
             steps {
-                dir('Calculator'){
+                dir('Calculator-App-SPE'){
                 sh 'sudo docker build -t ${DOCKER_IMAGE} .'
             }
         }
@@ -74,7 +74,7 @@ pipeline {
 
         stage('Run Ansible Deployment') {
             steps {
-                dir('Calculator') {
+                dir('Calculator-App-SPE') {
                 script {
                     sh '''
                     echo "Running Ansible Playbook..."
