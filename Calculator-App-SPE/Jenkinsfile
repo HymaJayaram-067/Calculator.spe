@@ -30,7 +30,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/HymaJayaram-067/Cal_viva_demo.git'
+                git branch: 'main', url: 'https://github.com/HymaJayaram-067/Calculator.spe.git'
             }
         }
 
